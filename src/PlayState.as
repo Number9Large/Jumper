@@ -10,8 +10,6 @@ package {
 		public var levelMap:Class;
 		[Embed(source = "../art/tilemap.png")]
 		public var levelTiles:Class;
-		[Embed(source = "../art/sPart.png")]
-		public var sPart:Class;
 		[Embed(source = "../art/tpPart.png")]
 		public var tpPart:Class;
 		
@@ -19,7 +17,6 @@ package {
 		public var player:Player;
 		public var enemy:Pig;
 		public var glass:Glass;
-		public var glassEm:FlxEmitter = new FlxEmitter(0, 0, 10);
 		public var boxEm:FlxEmitter = new FlxEmitter(0, 0, 10);
 		public var tpEm:FlxEmitter;
 		public var sprites:FlxGroup = new FlxGroup();
@@ -36,19 +33,9 @@ package {
 			boxes.add(new CrateBox(55, 25));
 			sprites.add(boxes);
 			sprites.add(player = new Player(25, 33));
-			sprites.add(glass = new Glass(35, 35));
-			sprites.add(glassEm);
+			glass = new Glass(sprites, 35, 35);
 			sprites.add(boxEm);
 			sprites.add(player.slimeShot);
-			
-			
-			glassEm.gravity = 420;
-			glassEm.particleDrag.x = 75;
-			glassEm.setRotation(0, 0);
-			glassEm.bounce = 0.3;
-			glassEm.makeParticles(sPart, 10, 16, true);
-			glassEm.setXSpeed(-50, 50);
-			glassEm.setYSpeed(-50, -100);
 			
 			add(new PlayerHUD(player));
 			add(sprites);
@@ -119,10 +106,7 @@ package {
 			}
 			
 			if (glass.frame == 8 && glass.controls) {
-				glassEm.x = glass.x += 4;
-				glassEm.y = glass.y;
-				glassEm.start(true, 3, 0.1, 5);
-				glass.controls = false;
+				glass.jumpOffTheGlass();
 				player.exists = true;
 				player.alive = true;
 				player.x = glass.x -= 5;
